@@ -114,7 +114,7 @@ def configure(ctx):
     ctx.env.append_unique('INCLUDES_CSP', ['include'] + ctx.options.includes.split(','))
 
     # Add default files
-    ctx.env.append_unique('FILES_CSP', ['src/*.c','src/interfaces/csp_if_lo.c','src/transport/csp_udp.c','src/arch/{0}/**/*.c'.format(ctx.options.with_os)])
+    ctx.env.append_unique('FILES_CSP', ['src/*.c','src/interfaces/csp_if_lo.c','src/transport/csp_udp.c', 'src/interfaces/csp_if_udp.c', 'src/arch/{0}/**/*.c'.format(ctx.options.with_os)])
     
     # Store OS as env variable
     ctx.env.append_unique('OS', ctx.options.with_os)
@@ -146,6 +146,9 @@ def configure(ctx):
     if ctx.options.with_driver_usart != None:
         ctx.env.append_unique('FILES_CSP', 'src/drivers/usart/usart_{0}.c'.format(ctx.options.with_driver_usart))
         
+    # Add UDP driver
+    ctx.env.append_unique('FILES_CSP', 'src/drivers/udp/udp_socketudp.c')
+
     # Interfaces
     if ctx.options.enable_if_can:
         ctx.env.append_unique('FILES_CSP', 'src/interfaces/csp_if_can.c')
@@ -253,6 +256,7 @@ def build(ctx):
         if 'src/drivers/usart/usart_{0}.c'.format(ctx.options.with_driver_usart) in ctx.env.FILES_CSP:
             ctx.install_as('${PREFIX}/include/csp/drivers/usart.h', 'include/csp/drivers/usart.h')
 
+        ctx.install_as('${PREFIX}/include/csp/drivers/udp.h', 'include/csp/drivers/udp.h')
         ctx.install_files('${PREFIX}/include/csp', 'include/csp/csp_autoconfig.h', cwd=ctx.bldnode)
 
     ctx(export_includes='include', name='csp_h')
