@@ -1,0 +1,27 @@
+version: '3.4'
+
+services:
+  zmq-forwarder:
+    image: registry.gitlab.satellogic.com/gci/ci-gs:minimal
+    command: /bin/bash -c "/usr/bin/zmq-forwarder.py tcp://*:6000 tcp://*:7000"
+
+  server:
+    image: libcsp:latest
+    build: 
+      context: .
+      target: libcsp
+    hostname: zmq_server
+    command: ./install/bin/csp_if_zmq_server -n 1 -s tcp://zmq-forwarder:7000 -p tcp://zmq-forwarder:6000
+    depends_on:
+      - "zmq-forwarder"
+
+  client:
+    image: libcsp:latest
+    build: 
+      context: .
+      target: libcsp
+    hostname: zmq_client
+    command: ./install/bin/csp_if_zmq_client -n 2 -d 1 -s tcp://zmq-forwarder:7000 -p tcp://zmq-forwarder:6000
+    depends_on:
+      - "zmq-forwarder"
+      - "server"
