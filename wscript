@@ -114,7 +114,7 @@ def configure(ctx):
     ctx.env.append_unique('INCLUDES_CSP', ['include'] + ctx.options.includes.split(','))
 
     # Add default files
-    ctx.env.append_unique('FILES_CSP', ['src/*.c','src/interfaces/csp_if_lo.c','src/transport/csp_udp.c', 'src/interfaces/csp_if_udp.c', 'src/arch/{0}/**/*.c'.format(ctx.options.with_os)])
+    ctx.env.append_unique('FILES_CSP', ['src/*.c','src/interfaces/csp_if_lo.c','src/transport/csp_udp.c', 'src/interfaces/csp_if_udp.c', 'src/interfaces/csp_if_eth.c', 'src/arch/{0}/**/*.c'.format(ctx.options.with_os)])
     
     # Store OS as env variable
     ctx.env.append_unique('OS', ctx.options.with_os)
@@ -148,6 +148,9 @@ def configure(ctx):
         
     # Add UDP driver
     ctx.env.append_unique('FILES_CSP', 'src/drivers/udp/udp_socketudp.c')
+
+    # Add ETH driver
+    ctx.env.append_unique('FILES_CSP', 'src/drivers/eth/eth_socketeth.c')
 
     # Interfaces
     if ctx.options.enable_if_can:
@@ -257,6 +260,7 @@ def build(ctx):
             ctx.install_as('${PREFIX}/include/csp/drivers/usart.h', 'include/csp/drivers/usart.h')
 
         ctx.install_as('${PREFIX}/include/csp/drivers/udp.h', 'include/csp/drivers/udp.h')
+        ctx.install_as('${PREFIX}/include/csp/drivers/eth.h', 'include/csp/drivers/eth.h')
         ctx.install_files('${PREFIX}/include/csp', 'include/csp/csp_autoconfig.h', cwd=ctx.bldnode)
 
     ctx(export_includes='include', name='csp_h')
@@ -308,6 +312,18 @@ def build(ctx):
 
             ctx.program(source = 'examples/csp_if_udp_client.c',
                 target = 'csp_if_udp_client',
+                includes = ctx.env.INCLUDES_CSP,
+                lib = ctx.env.LIBS,
+                use = 'csp')
+
+            ctx.program(source = 'examples/csp_if_eth_server.c',
+                target = 'csp_if_eth_server',
+                includes = ctx.env.INCLUDES_CSP,
+                lib = ctx.env.LIBS,
+                use = 'csp')
+
+            ctx.program(source = 'examples/csp_if_eth_client.c',
+                target = 'csp_if_eth_client',
                 includes = ctx.env.INCLUDES_CSP,
                 lib = ctx.env.LIBS,
                 use = 'csp')
