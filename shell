@@ -24,7 +24,7 @@ DOCKER_CMD="docker run \
     -v /usr/share/git/completion:/usr/share/git/completion \
     --privileged \
     --hostname libcsp-dev \
-    -i -t -w $PWD -u $(id -u):$(id -g) --rm \
+    -i -t -w $PWD -u 0:0 --rm \
     -e DISPLAY=$DISPLAY \
     -e LANG=C.UTF-8 -e LC_ALL=C.UTF-8 \
     -e TZ=$(cat /etc/timezone) \
