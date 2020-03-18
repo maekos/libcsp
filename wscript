@@ -316,13 +316,13 @@ def build(ctx):
                 lib = ctx.env.LIBS,
                 use = 'csp')
 
-            ctx.program(source = 'examples/csp_if_eth_server.c',
+            ctx.program(source = ['examples/csp_if_eth_server.c', 'examples/csp_basic_server.c'],
                 target = 'csp_if_eth_server',
                 includes = ctx.env.INCLUDES_CSP,
                 lib = ctx.env.LIBS,
                 use = 'csp')
 
-            ctx.program(source = 'examples/csp_if_eth_client.c',
+            ctx.program(source = ['examples/csp_if_eth_client.c', 'examples/chat.c'],
                 target = 'csp_if_eth_client',
                 includes = ctx.env.INCLUDES_CSP,
                 lib = ctx.env.LIBS,
