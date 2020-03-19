@@ -328,6 +328,12 @@ def build(ctx):
                 lib = ctx.env.LIBS,
                 use = 'csp')
 
+            ctx.program(source = 'examples/csp_if_udp_eth_router.c',
+                target = 'router_csp',
+                includes = ctx.env.INCLUDES_CSP,
+                lib = ctx.env.LIBS,
+                use = 'csp')
+
         if 'windows' in ctx.env.OS:
             ctx.program(source = ctx.path.ant_glob('examples/csp_if_fifo_windows.c'),
                 target = 'csp_if_fifo',
