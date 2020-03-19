@@ -69,9 +69,9 @@ typedef enum {
 
 /** Size of bit-fields in CSP header */
 #define CSP_ID_PRIO_SIZE		2
-#define CSP_ID_HOST_SIZE		5
+#define CSP_ID_HOST_SIZE		6
 #define CSP_ID_PORT_SIZE		6
-#define CSP_ID_FLAGS_SIZE		8
+#define CSP_ID_FLAGS_SIZE		6
 
 #define CSP_HEADER_BITS			(CSP_ID_PRIO_SIZE + 2 * CSP_ID_HOST_SIZE + 2 * CSP_ID_PORT_SIZE + CSP_ID_FLAGS_SIZE)
 #define CSP_HEADER_LENGTH		(CSP_HEADER_BITS / 8)

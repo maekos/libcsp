@@ -106,8 +106,8 @@ int main(int argc, char **argv)
 	csp_route_start_task(500, 1);
 
 
-	csp_route_set(1, &csp_if_eth, CSP_NODE_MAC);
-	csp_route_set(2, &csp_if_udp, CSP_NODE_MAC);
+	csp_route_set(31, &csp_if_eth, CSP_NODE_MAC);
+	csp_route_set(32, &csp_if_udp, CSP_NODE_MAC);
 	csp_log_info("CSP Router adapter task started");
 
 	if (pthread_create(&rx_thread, NULL, csp_router, NULL) != 0) {
