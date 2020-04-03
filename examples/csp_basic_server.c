@@ -30,27 +30,25 @@ void* csp_basic_server(void *parameters)
     /* Process incoming connections */
     while (1)
     {
-		/* Wait for connection, 10000 ms timeout */
-		conn = csp_accept(sock, 10000);
-		if (!conn)
-		{
+        /* Wait for connection, 10000 ms timeout */
+        conn = csp_accept(sock, 10000);
+        if (!conn)
             continue;
-		}
 
         /* Read packets. Timeout is 1000 ms */
         while ((packet = csp_read(conn, 1000)) != NULL) 
-		{
+        {
             switch (csp_conn_dport(conn)) 
-			{
-                case CHAT_PORT:
-                    /* Process packet here */
-					printf("From[%d]: ", packet->id.src);
-					printf("%s\n", packet->data);
-					break;
-                default:
-                    /* Let the service handler reply pings, buffer use, etc. */
-                    csp_service_handler(conn, packet);
-                    break;
+            {
+            case CHAT_PORT:
+                /* Process packet here */
+                printf("From[%d]: ", packet->id.src);
+                printf("%s\n", packet->data);
+                break;
+            default:
+                /* Let the service handler reply pings, buffer use, etc. */
+                csp_service_handler(conn, packet);
+                break;
             }
         }
 
