@@ -152,6 +152,55 @@ int csp_zmqhub_init_w_endpoints(char _addr, char * publisher_endpoint,
 
 }
 
+static void bind_or_connect(void* socket, char* endpoint, int bind)
+{
+    if(bind)
+    {
+        assert(zmq_bind(socket, endpoint) == 0);
+    }
+    else
+    {
+    	assert(zmq_connect(socket, endpoint) == 0);
+    }
+
+}
+
+int csp_zmqhub_init_subscriber(char * subscriber_endpoint, int bind) 
+{
+	void * context = zmq_ctx_new();
+	assert(context);
+
+	csp_log_info("INIT ZMQ subscriber %s\r\n", subscriber_endpoint);
+
+    /* Subscriber (RX) */
+    subscriber = zmq_socket(context, ZMQ_SUB);
+    assert(subscriber);
+	bind_or_connect(subscriber, subscriber_endpoint, bind);
+	assert(zmq_setsockopt(subscriber, ZMQ_SUBSCRIBE, "", 0) == 0);
+
+	/* Start RX thread */
+	static csp_thread_handle_t handle_subscriber;
+	int ret = csp_thread_create(csp_zmqhub_task, "ZMQ", 10000, NULL, 0, &handle_subscriber);
+	csp_log_info("Task start %d\r\n", ret);
+
+	return CSP_ERR_NONE;
+}
+
+int csp_zmqhub_init_publisher(char * publisher_endpoint, int bind) 
+{
+	context = zmq_ctx_new();
+	assert(context);
+
+	csp_log_info("INIT ZMQ publishier %s\r\n", publisher_endpoint);
+
+	/* Publisher (TX) */
+    publisher = zmq_socket(context, ZMQ_PUB);
+    assert(publisher);
+	bind_or_connect(publisher, publisher_endpoint, bind);
+
+	return CSP_ERR_NONE;
+}
+
 /* Interface definition */
 csp_iface_t csp_if_zmqhub = {
 	.name = "ZMQHUB",

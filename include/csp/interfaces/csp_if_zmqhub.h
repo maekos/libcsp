@@ -27,6 +27,22 @@ int csp_zmqhub_init(char addr, char * host);
 int csp_zmqhub_init_w_endpoints(char _addr, char * publisher_url,
 		char * subscriber_url);
 
+/**
+ * Initialize a ZMQ subscriber
+ * @param endpoint Pointer to string containing zmqproxy subscriber endpoint
+ * @param bind Indicates with 1 for wait connections or 0 for connect to other sunscriber endpoint
+ * @return CSP_ERR
+ */
+int csp_zmqhub_init_subscriber(char * endpoint, int bind); 
+
+/**
+ * Initialize a ZMQ publisher
+ * @param endpoint Pointer to string containing zmqproxy publisher endpoint
+ * @param bind Indicates with 1 for wait connections or 0 for connect to other publisher endpoint
+ * @return CSP_ERR
+ */
+int csp_zmqhub_init_publisher(char * endpoint, int bind); 
+
 #ifdef __cplusplus
 } /* extern "C" */
 #endif
